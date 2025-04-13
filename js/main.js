@@ -235,5 +235,47 @@
             $('#' + checkbox_id + '-show').slideDown();
         }
     });
-})(jQuery);
 
+    // Product Search
+    $(document).ready(function () {
+        var $searchInput = $('#searchInput');
+        var $searchButton = $('#searchButton');
+        var $productColumns = $('.products-container .col-md-4').has('.product-item');
+        var $noResults = $('#noResults');
+
+        function filterProducts(keyword) {
+            keyword = keyword.toLowerCase().trim();
+            var hasResults = false;
+
+            $productColumns.each(function () {
+                var $column = $(this);
+                var title = $column.find('.product-title a').text().toLowerCase();
+                if (title.indexOf(keyword) !== -1 || keyword === '') {
+                    $column.removeClass('hidden');
+                    hasResults = true;
+                } else {
+                    $column.addClass('hidden');
+                }
+            });
+
+            if ($noResults.length) {
+                $noResults.css('display', hasResults || keyword === '' ? 'none' : 'block');
+            }
+        }
+
+        $searchInput.on('input', function () {
+            filterProducts($(this).val());
+        });
+
+        $searchButton.on('click', function () {
+            filterProducts($searchInput.val());
+        });
+
+        $searchInput.on('keypress', function (e) {
+            if (e.which === 13) {
+                filterProducts($(this).val());
+            }
+        });
+    });
+
+})(jQuery);

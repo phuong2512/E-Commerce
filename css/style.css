@@ -1841,7 +1841,12 @@ h2 {
     background: #000000;
 }
 
-
+.checkout-btn-2{
+    color: white;
+}
+.checkout-btn-2:hover {
+    color: #FF6F61;
+}
 /**********************************/
 /********* My Account CSS *********/
 /**********************************/
@@ -2433,4 +2438,52 @@ h2 {
     .footer-bottom .template-by {
         text-align: center; 
     } 
+}
+
+/* Căn chỉnh lại lưới sản phẩm khi tìm kiếm */
+.product-view .row.products-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.product-view .row.products-container .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding-right: 15px;
+    padding-left: 15px;
+    transition: all 0.3s ease;
+}
+
+.product-view .row.products-container .col-md-4.hidden {
+    display: none;
+}
+
+/* Đảm bảo responsive */
+@media (max-width: 991.98px) {
+    .product-view .row.products-container .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .product-view .row.products-container .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Style cho thông báo không tìm thấy */
+#noResults {
+    display: none;
+    text-align: center;
+    color: #FF6F61;
+    margin: 20px 0;
+    padding: 10px;
+    background: #ffffff;
+    border: 1px solid #FF6F61;
+    border-radius: 4px;
+    width: 100%;
 }
