@@ -18,7 +18,6 @@
         $(window).resize(toggleNavbarMethod);
     });
     
-    
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
@@ -32,7 +31,6 @@
         return false;
     });
     
-    
     // Header slider
     $('.header-slider').slick({
         autoplay: true,
@@ -41,7 +39,6 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-    
     
     // Product Slider 4 Column
     $('.product-slider-4').slick({
@@ -78,7 +75,6 @@
         ]
     });
     
-    
     // Product Slider 3 Column
     $('.product-slider-3').slick({
         autoplay: true,
@@ -108,7 +104,6 @@
         ]
     });
     
-    
     // Product Detail Slider
     $('.product-slider-single').slick({
         infinite: true,
@@ -127,7 +122,6 @@
         focusOnSelect: true,
         asNavFor: '.product-slider-single'
     });
-    
     
     // Brand Slider
     $('.brand-slider').slick({
@@ -171,7 +165,6 @@
         ]
     });
     
-    
     // Review slider
     $('.review-slider').slick({
         autoplay: true,
@@ -189,7 +182,6 @@
         ]
     });
     
-    
     // Widget slider
     $('.sidebar-slider').slick({
         autoplay: true,
@@ -198,7 +190,6 @@
         slidesToShow: 1,
         slidesToScroll: 1
     });
-    
     
     // Quantity
     $('.qty button').on('click', function () {
@@ -216,7 +207,6 @@
         $button.parent().find('input').val(newVal);
     });
     
-    
     // Shipping address show hide
     $('.checkout #shipto').change(function () {
         if($(this).is(':checked')) {
@@ -225,7 +215,6 @@
             $('.checkout .shipping-address').slideUp();
         }
     });
-    
     
     // Payment methods show hide
     $('.checkout .payment-method .custom-control-input').change(function () {
@@ -238,8 +227,12 @@
 
     // Product Search
     $(document).ready(function () {
-        var $searchInput = $('#searchInput');
-        var $searchButton = $('#searchButton');
+        var $searchInput = $('#searchInput'); // Ô tìm kiếm trong .product-view-top (product-list.html)
+        var $searchButton = $('#searchButton'); // Nút tìm kiếm trong .product-view-top
+        var $headerSearchInput = $('#headerSearchInput'); // Ô tìm kiếm trong .bottom-bar (product-list.html)
+        var $headerSearchButton = $('#headerSearchButton'); // Nút tìm kiếm trong .bottom-bar (product-list.html)
+        var $homeSearchInput = $('#homeSearchInput'); // Ô tìm kiếm trong .bottom-bar (index.html)
+        var $homeSearchButton = $('#homeSearchButton'); // Nút tìm kiếm trong .bottom-bar (index.html)
         var $productColumns = $('.products-container .col-md-4').has('.product-item');
         var $noResults = $('#noResults');
 
@@ -263,19 +256,70 @@
             }
         }
 
-        $searchInput.on('input', function () {
-            filterProducts($(this).val());
-        });
-
-        $searchButton.on('click', function () {
-            filterProducts($searchInput.val());
-        });
-
-        $searchInput.on('keypress', function (e) {
-            if (e.which === 13) {
+        // Ô tìm kiếm trong .product-view-top (product-list.html)
+        if ($searchInput.length) {
+            $searchInput.on('input', function () {
                 filterProducts($(this).val());
+            });
+
+            $searchButton.on('click', function () {
+                filterProducts($searchInput.val());
+            });
+
+            $searchInput.on('keypress', function (e) {
+                if (e.which === 13) {
+                    filterProducts($(this).val());
+                }
+            });
+        }
+
+        // Ô tìm kiếm trong .bottom-bar (product-list.html)
+        if ($headerSearchInput.length) {
+            $headerSearchInput.on('keypress', function (e) {
+                if (e.which === 13) {
+                    filterProducts($(this).val());
+                }
+            });
+
+            $headerSearchButton.on('click', function () {
+                filterProducts($headerSearchInput.val());
+            });
+        }
+
+        // Ô tìm kiếm trong .bottom-bar (index.html)
+        if ($homeSearchInput.length) {
+            $homeSearchInput.on('keypress', function (e) {
+                if (e.which === 13) {
+                    var keyword = $(this).val().trim();
+                    if (keyword) {
+                        window.location.href = 'product-list.html?search=' + encodeURIComponent(keyword);
+                    }
+                }
+            });
+
+            $homeSearchButton.on('click', function () {
+                var keyword = $homeSearchInput.val().trim();
+                if (keyword) {
+                    window.location.href = 'product-list.html?search=' + encodeURIComponent(keyword);
+                }
+            });
+        }
+
+        // Kiểm tra query string khi tải product-list.html
+        if ($productColumns.length) {
+            var urlParams = new URLSearchParams(window.location.search);
+            var searchKeyword = urlParams.get('search');
+            if (searchKeyword) {
+                filterProducts(decodeURIComponent(searchKeyword));
+                // Cập nhật giá trị ô tìm kiếm trong product-list.html
+                if ($searchInput.length) {
+                    $searchInput.val(decodeURIComponent(searchKeyword));
+                }
+                if ($headerSearchInput.length) {
+                    $headerSearchInput.val(decodeURIComponent(searchKeyword));
+                }
             }
-        });
+        }
     });
 
 })(jQuery);
